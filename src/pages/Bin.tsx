@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { getCurrentBinSchedule } from '../utils/binSchedule';
 import publicHolidaysData from '../data/publicHolidays.json';
+import { Link } from 'react-router-dom';
 
 function Bin() {
   // Load and parse public holidays with error handling
@@ -107,7 +108,14 @@ function Bin() {
             </div>
           </div>
         )}
+        <Link 
+          to="/" 
+          className="inline-block px-6 py-3 border-2 border-solid border-(--color-primary) text-(--color-primary) rounded-lg hover:opacity-90 transition-opacity"
+        >
+          ← Back
+        </Link>
       </div>
+
     </div>
   );
 }
