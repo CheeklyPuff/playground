@@ -37,9 +37,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-], {
-  basename: '/playground',
-});
+]);
 
 function App() {
   return <RouterProvider router={router} />;
