@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getCurrentBinSchedule } from '../utils/binSchedule';
+import { getCurrentWeekBinSchedule } from '../utils/binSchedule';
 import publicHolidaysData from '../data/publicHolidays.json';
 import { Link } from 'react-router-dom';
 
@@ -40,25 +40,48 @@ function Bin() {
     return holidays;
   }, []);
 
-  // Get current bin schedule
-  const scheduleInfo = useMemo(() => {
-    return getCurrentBinSchedule(new Date(), publicHolidays);
+  // Get current week's bin schedule (can be in the past)
+  const thisWeekSchedule = useMemo(() => {
+    return getCurrentWeekBinSchedule(new Date(), publicHolidays);
   }, [publicHolidays]);
 
-  // Format collection day
-  const collectionDayName = scheduleInfo.collectionDay.toLocaleDateString('en-US', { 
+  // Get next collection schedule (next week)
+  const nextWeekSchedule = useMemo(() => {
+    // Calculate next week's date (7 days from this week's collection)
+    const nextWeekDate = new Date(thisWeekSchedule.collectionDay);
+    nextWeekDate.setDate(nextWeekDate.getDate() + 7);
+    return getCurrentWeekBinSchedule(nextWeekDate, publicHolidays);
+  }, [thisWeekSchedule.collectionDay, publicHolidays]);
+
+  // Format this week's collection day
+  const thisWeekCollectionDay = thisWeekSchedule.collectionDay.toLocaleDateString('en-US', { 
     weekday: 'long',
     month: 'long',
     day: 'numeric',
     year: 'numeric'
   });
 
-  // Determine bin color classes
-  const binColorClass = scheduleInfo.binType === 'green' 
-    ? 'bg-green-600 text-white' 
-    : 'bg-yellow-400 text-gray-900';
+  // Format next week's collection day
+  const nextWeekCollectionDay = nextWeekSchedule.collectionDay.toLocaleDateString('en-US', { 
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
 
-  const binLabel = scheduleInfo.binType === 'green' ? 'Green Bin' : 'Recycle Bin';
+  // Determine bin color classes for this week
+  const binColorClass = thisWeekSchedule.binType === 'green' 
+    ? 'bg-green-600' 
+    : 'bg-yellow-400';
+
+  const binLabel = thisWeekSchedule.binType === 'green' ? 'Green Bin' : 'Recycle Bin';
+
+  // Determine next week's bin color and label
+  const nextBinColorClass = nextWeekSchedule.binType === 'green' 
+    ? 'bg-green-600' 
+    : 'bg-yellow-400';
+
+  const nextBinLabel = nextWeekSchedule.binType === 'green' ? 'Green Bin' : 'Recycle Bin';
 
   return (
     <div className="min-h-screen p-8">
@@ -69,22 +92,22 @@ function Bin() {
 
         {/* Bin Type Display */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">This Week's Bin:</h2>
-          <div className={`${binColorClass} p-6 rounded-lg text-center`}>
-            <p className="text-3xl font-bold">{binLabel}</p>
+          <h2 className="text-xl font-semibold mb-4">This Week's Bin: {thisWeekCollectionDay}</h2>
+          <div className={`${binColorClass} text-primary p-6 rounded-lg text-center`}>
+            <p className="text-2xl font-bold">{binLabel}</p>
           </div>
         </div>
 
-        {/* Collection Day Display */}
+        {/* Next Collection Day Display */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Collection Day:</h2>
-          <div className="bg-(--color-primary) text-white p-6 rounded-lg">
-            <p className="text-xl font-semibold">{collectionDayName}</p>
+          <h2 className="text-xl font-semibold mb-4">Next Collection Day: {nextWeekCollectionDay}</h2>
+          <div className={`${nextBinColorClass} text-primary p-6 rounded-lg text-center`}>
+            <p className="text-2xl font-bold">{nextBinLabel}</p>
           </div>
         </div>
 
         {/* Holiday Warning */}
-        {scheduleInfo.isHolidayAffected && scheduleInfo.holidayMessage && (
+        {thisWeekSchedule.isHolidayAffected && thisWeekSchedule.holidayMessage && (
           <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 rounded">
             <div className="flex items-start">
               <div className="shrink-0">
@@ -103,7 +126,7 @@ function Bin() {
               </div>
               <div className="ml-3">
                 <p className="font-semibold">Public Holiday Notice</p>
-                <p className="mt-1">{scheduleInfo.holidayMessage}</p>
+                <p className="mt-1">{thisWeekSchedule.holidayMessage}</p>
               </div>
             </div>
           </div>
