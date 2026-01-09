@@ -19,9 +19,9 @@ function MonsterHunter() {
 
         <Link 
           to="/" 
-          className="inline-block px-6 py-3 bg-(--color-primary) text-white rounded-lg hover:opacity-90 transition-opacity"
+          className="inline-block px-6 py-3 border-2 border-solid border-(--color-primary) text-(--color-primary) rounded-lg hover:opacity-90 transition-opacity"
         >
-          ← Back to Home
+          ← Back
         </Link>
       </div>
     </div>
