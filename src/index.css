@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* Default theme */
+:root {
+  --color-primary: #3b82f6;
+  --color-secondary: #8b5cf6;
+  --color-background: #ffffff;
+  --color-text: #1f2937;
+}
+
+/* Bin theme */
+[data-theme="bin"] {
+  --color-primary: #14532d;
+  --color-secondary: #eab308;
+  --color-background: #f0fdf4;
+  --color-text: #14532d;
+}
+
+/* Monster Hunter theme */
+[data-theme="monsterhunter"] {
+  --color-primary: #ef4444;
+  --color-secondary: #f59e0b;
+  --color-background: #fef2f2;
+  --color-text: #7f1d1d;
+}
+
+/* Apply background color to body based on theme */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  min-height: 100vh;
+}
