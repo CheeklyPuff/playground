@@ -18,6 +18,7 @@ function MonsterHunter() {
     addItem,
     updateQuantity,
     getItemQuantity,
+    clearInventory,
   } = useInventory();
 
   return (
@@ -55,6 +56,7 @@ function MonsterHunter() {
             <InventoryDisplay
               inventory={inventory}
               onUpdateQuantity={updateQuantity}
+              onClearInventory={clearInventory}
             />
           </div>
         </div>

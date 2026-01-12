@@ -8,6 +8,7 @@ export interface UseInventoryResult {
   removeItem: (itemId: number) => void;
   updateQuantity: (itemId: number, delta: number) => void;
   getItemQuantity: (itemId: number) => number;
+  clearInventory: () => void;
 }
 
 export function useInventory(): UseInventoryResult {
@@ -73,11 +74,16 @@ export function useInventory(): UseInventoryResult {
     return inventory.get(itemId)?.quantity || 0;
   };
 
+  const clearInventory = () => {
+    setInventory(new Map());
+  };
+
   return {
     inventory,
     addItem,
     removeItem,
     updateQuantity,
     getItemQuantity,
+    clearInventory,
   };
 }

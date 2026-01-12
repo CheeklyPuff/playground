@@ -4,16 +4,27 @@ import { InventoryItem } from './InventoryItem';
 interface InventoryDisplayProps {
   inventory: Map<number, InventoryItemType>;
   onUpdateQuantity: (itemId: number, delta: number) => void;
+  onClearInventory: () => void;
 }
 
-export function InventoryDisplay({ inventory, onUpdateQuantity }: InventoryDisplayProps) {
+export function InventoryDisplay({ inventory, onUpdateQuantity, onClearInventory }: InventoryDisplayProps) {
   const inventoryArray = Array.from(inventory.values());
 
   return (
     <div className="flex flex-col h-full">
-      <h2 className="text-2xl font-bold text-(--color-primary) mb-4">
-        My Inventory
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold text-(--color-primary)">
+          My Inventory
+        </h2>
+        {inventoryArray.length > 0 && (
+          <button
+            onClick={onClearInventory}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          >
+            Clear All
+          </button>
+        )}
+      </div>
 
       {inventoryArray.length === 0 ? (
         <div className="text-center py-8 text-(--color-secondary)">
